@@ -1616,7 +1616,7 @@ PYBIND11_EMBEDDED_MODULE(c_python_backend_utils, module)
       module, "InferenceRequest")
       .def(
           py::init([](const std::string& request_id,
-                      const std::string& correlation_id,
+                      const py::object& correlation_id,
                       const std::vector<std::shared_ptr<PbTensor>>& inputs,
                       const std::vector<std::string>& requested_output_names,
                       const std::string& model_name,
@@ -1650,7 +1650,7 @@ PYBIND11_EMBEDDED_MODULE(c_python_backend_utils, module)
             std::string parameters_str =
                 py::str(py_json.attr("dumps")(parameters));
             return std::make_shared<InferRequest>(
-                request_id, correlation_id, inputs, requested_outputs,
+                request_id, py::cast<std::string>(correlation_id), inputs, requested_outputs,
                 model_name, model_version, parameters_str, flags, timeout,
                 0 /*response_factory_address*/, 0 /*request_address*/,
                 preferred_memory, trace);
